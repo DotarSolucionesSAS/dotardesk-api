@@ -204,7 +204,7 @@ func (s *AddressBookService) ListCollectionByIds(ids []uint) (res []*model.Addre
 }
 
 func (s *AddressBookService) ListCollectionByUserId(userId uint) (res *model.AddressBookCollectionList) {
-	res = s.ListCollection(1, 100, func(tx *gorm.DB) {
+	res = s.ListCollection(1, 300, func(tx *gorm.DB) {
 		tx.Where("user_id = ?", userId)
 	})
 	return
