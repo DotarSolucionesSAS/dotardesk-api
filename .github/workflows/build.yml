@@ -29,6 +29,7 @@ on:
         default: 'https://github.com/lejianwen/rustdesk-api-web'
   push:
     tags:
+      - 'v2.0.0'
       - 'v*.*.*'  # 当推送带有版本号的 tag（例如 v1.0.0）时触发工作流
       - 'test*'
 
@@ -83,7 +84,11 @@ jobs:
 
       - name: tidy
         run: go mod tidy
-
+      
+      - name: Create tag if missing
+        if: startsWith(github.ref, 'refs/heads/')
+        run: git tag v2.0.${{ github.run_number }} && git push origin v2.0.${{ github.run_number }}
+      
       - name: Get tag version
         run: |
           TAG_VERSION="${GITHUB_REF##*/}"
