@@ -155,7 +155,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && github.event_name == 'push'
         run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.RELEASE_PAT }}
 
   deb-package:
     name: debian package - ${{ matrix.job.platform }}
@@ -264,7 +264,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.RELEASE_PAT }}
 
       - name: Extract version from tag
         id: vars
@@ -382,7 +382,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.RELEASE_PAT }}
 
       - name: Create and push manifest Docker Hub (:version)
         if: ${{ env.SKIP_DOCKER_HUB == 'false' }}
