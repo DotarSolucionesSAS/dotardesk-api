@@ -191,7 +191,7 @@ jobs:
         with:
           tag_name: latest
           files: |
-            debian-build/dotardesk-api-server_*_${{ matrix.job.debian_platform }}.deb
+            debian-build/rustdesk-api-server_*_${{ matrix.job.debian_platform }}.deb
 
   docker:
     name: Push Docker Image
