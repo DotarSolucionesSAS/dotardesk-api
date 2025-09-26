@@ -120,7 +120,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rustdesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
+          name: dotardesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
           path: |
             ${{ matrix.job.goos}}-${{ matrix.job.platform }}.${{matrix.job.file_ext}}
 
@@ -161,7 +161,7 @@ jobs:
       - name: Download binaries
         uses: actions/download-artifact@v4
         with:
-          name: rustdesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
+          name: dotardesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
           path: .
 
       - name: Unzip binaries
@@ -171,7 +171,7 @@ jobs:
 
       - name: Build package for ${{ matrix.job.platform }} arch
         run: |
-          mv ${{ matrix.job.platform }}/release/apimain debian-build/${{ matrix.job.platform }}/bin/rustdesk-api 
+          mv ${{ matrix.job.platform }}/release/apimain debian-build/${{ matrix.job.platform }}/bin/dotardesk-api 
           chmod -v a+x debian-build/${{ matrix.job.platform }}/bin/*
           mkdir -p data
           cp -vr debian systemd conf data resources runtime debian-build/${{ matrix.job.platform }}/
@@ -182,7 +182,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rustdesk-api-${{ matrix.job.debian_platform }}
+          name: dotardesk-api-${{ matrix.job.debian_platform }}
           path: |
             debian-build/*.deb
 
@@ -191,7 +191,7 @@ jobs:
         with:
           tag_name: latest
           files: |
-            debian-build/rustdesk-api-server_*_${{ matrix.job.debian_platform }}.deb
+            debian-build/dotardesk-api-server_*_${{ matrix.job.debian_platform }}.deb
 
   docker:
     name: Push Docker Image
@@ -242,12 +242,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.BASE_IMAGE_NAMESPACE }}/rustdesk-api
+          images: ${{ env.BASE_IMAGE_NAMESPACE }}/dotardesk-api
 
       - name: Download binaries
         uses: actions/download-artifact@v4
         with:
-          name: rustdesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
+          name: dotardesk-api-${{ matrix.job.goos }}-${{ matrix.job.platform }}
           path: ./
 
       - name: Unzip binaries
@@ -267,7 +267,7 @@ jobs:
           build-args: |
             BUILDARCH=${{ matrix.job.platform }}
           tags: |
-            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-${{ matrix.job.platform }}
+            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-${{ matrix.job.platform }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image to GHCR ${{ matrix.job.platform }}
@@ -282,7 +282,7 @@ jobs:
           build-args: |
             BUILDARCH=${{ matrix.job.platform }}
           tags: |
-            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-${{ matrix.job.platform }}
+            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-${{ matrix.job.platform }}
           labels: ${{ steps.meta.outputs.labels }}
 
   #
@@ -319,19 +319,19 @@ jobs:
         if: ${{ env.SKIP_DOCKER_HUB == 'false' }}
         uses: Noelware/docker-manifest-action@v0.2.3
         with:
-          base-image: ${{ env.BASE_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}
-          extra-images: ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-amd64,
-            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-armv7l,
-            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-arm64
+          base-image: ${{ env.BASE_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}
+          extra-images: ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-amd64,
+            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-armv7l,
+            ${{ env.DOCKERHUB_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-arm64
           push: true
 
       - name: Create and push manifest GHCR (:version)
         if: ${{ env.SKIP_GHCR == 'false' }}
         uses: Noelware/docker-manifest-action@v0.2.3
         with:
-          base-image: ghcr.io/${{ env.BASE_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}
-          extra-images: ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-amd64,
-            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-armv7l,
-            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/rustdesk-api:${{ env.TAG }}-arm64
+          base-image: ghcr.io/${{ env.BASE_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}
+          extra-images: ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-amd64,
+            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-armv7l,
+            ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/dotardesk-api:${{ env.TAG }}-arm64
           push: true
           amend: true
