@@ -129,7 +129,7 @@ jobs:
         with:
           files: |
             ${{ matrix.job.goos}}-${{ matrix.job.platform }}.${{matrix.job.file_ext}}
-          tag_name: test
+          tag_name: latest
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
 
@@ -189,7 +189,7 @@ jobs:
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: test
+          tag_name: latest
           files: |
             debian-build/rustdesk-api-server_*_${{ matrix.job.debian_platform }}.deb
 
@@ -235,7 +235,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           else
-            echo "TAG=test" >> $GITHUB_ENV  # Default to 'test' if not a tag
+            echo "TAG=latest" >> $GITHUB_ENV  # Default to 'test' if not a tag
           fi
 
       - name: Extract metadata (tags, labels) for Docker
@@ -297,7 +297,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           else
-            echo "TAG=test" >> $GITHUB_ENV  # Default to 'test' if not a tag
+            echo "TAG=latest" >> $GITHUB_ENV  # Default to 'test' if not a tag
           fi
 
       - name: Log in to Docker Hub
