@@ -171,7 +171,7 @@ jobs:
 
       - name: Build package for ${{ matrix.job.platform }} arch
         run: |
-          mv ${{ matrix.job.platform }}/release/apimain debian-build/${{ matrix.job.platform }}/bin/dotardesk-api 
+          mv ${{ matrix.job.platform }}/release/apimain debian-build/${{ matrix.job.platform }}/bin/rustdesk-api 
           chmod -v a+x debian-build/${{ matrix.job.platform }}/bin/*
           mkdir -p data
           cp -vr debian systemd conf data resources runtime debian-build/${{ matrix.job.platform }}/
